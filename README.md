@@ -1,17 +1,34 @@
 # Yako Celebrations
 
+[![Pub Version](https://img.shields.io/pub/v/yako_celebrations?color=blueviolet)](https://pub.dev/packages/yako_celebrations)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![style: flutter lints](https://img.shields.io/badge/style-flutter__lints-blue)](https://pub.dev/packages/flutter_lints)
+
 Full-screen celebrations for Flutter in one line: flames, spinning coins,
 confetti, fireworks, **your own logo popping up everywhere**, a slamming title,
-flash, shake, sound and haptics. Pick a ready-made tier or build your own.
+flash, shake, sound and haptics.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/yako-dev/flutter-yako-celebrations/main/screenshots/legendary.webp" width="300" alt="The legendary tier: rainbow flames, a wall of fire, fireworks and a storm of brand icons">
+  <img src="https://raw.githubusercontent.com/yako-dev/flutter-yako-celebrations/main/screenshots/legendary.webp" width="280" alt="The legendary tier: rainbow flames, a wall of fire, fireworks and a storm of brand icons">
+  &nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/yako-dev/flutter-yako-celebrations/main/screenshots/lottie_legendary.webp" width="280" alt="The lottieLegendary tier: a wall of flames, fireworks and coins under a gold title">
+</p>
+<p align="center">
+  <sub><b>Classic</b> &nbsp;<code>CelebrationTier.legendary</code> &nbsp;&nbsp;·&nbsp;&nbsp; <b>Lottie</b> &nbsp;<code>CelebrationTier.lottieLegendary</code></sub>
 </p>
 
-Two ladders to pick from: effects drawn in code, or designer-made Lottie
-animations. Both run on one clock and never block touches. Every built-in
-sound is synthesised by the package's own script, so you can ship it in any
-app.
+- **One line.** `YakoCelebration.show(context, tier: CelebrationTier.epic)`.
+  It covers the screen, plays its sound and haptics, and cleans up after
+  itself.
+- **Ten ready-made tiers in two styles.** Five sizes drawn in code, and five
+  built from designer-made Lottie animations.
+- **Your brand.** Your icon pops up in the show and your name sits in a small
+  badge.
+- **Sound and haptics** in time with the picture. The built-in sounds are
+  synthesised by the package's own script, so you can ship them in any app.
+- **Build your own** from 14 effects, each on the same clock.
+- **Never in the way.** It ignores touches, respects reduced motion, and one
+  clock means slow motion and widget tests just work.
 
 ## Installing
 
@@ -29,7 +46,9 @@ YakoCelebration.show(context, tier: CelebrationTier.epic);
 ```
 
 That's it: the celebration covers the whole screen, plays its sound and
-haptics, and cleans up after itself.
+haptics, and cleans up after itself. It sits over everything in the root
+`Overlay`; to keep one inside a part of your screen, see
+[Inside one part of the screen](#inside-one-part-of-the-screen).
 
 Change the text, or keep a handle to change it while it runs:
 
@@ -47,6 +66,10 @@ handle.cancel(); // stop early
 ```
 
 ## Tiers
+
+### Classic tiers
+
+Drawn in code: particles, glows and flames painted every frame.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/yako-dev/flutter-yako-celebrations/main/screenshots/tiers.webp" alt="The five tiers, from subtle to legendary">
@@ -68,10 +91,6 @@ sound, as long as the celebration itself.
 The same five sizes, built from Lottie animations (light rays, confetti,
 streamers, fireworks, a coin rain, fire) with a gold title that slams in and
 catches a light sweep:
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/yako-dev/flutter-yako-celebrations/main/screenshots/lottie_legendary.webp" width="300" alt="The lottieLegendary tier: a wall of flames, fireworks and coins under a gold title">
-</p>
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/yako-dev/flutter-yako-celebrations/main/screenshots/lottie_tiers.webp" alt="The five Lottie tiers, from lottieSubtle to lottieLegendary">
