@@ -1,4 +1,4 @@
-## [0.1.0] - [Sep 26, 2026]
+## [1.0.0] - [Sep 26, 2026]
 
 * First release.
 * `YakoCelebration.show(context, tier: ...)`: a full-screen celebration in one

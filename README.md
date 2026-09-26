@@ -34,7 +34,7 @@ flash, shake, sound and haptics.
 
 ```yaml
 dependencies:
-  yako_celebrations: ^0.1.0
+  yako_celebrations: ^1.0.0
 ```
 
 ## Quick start
