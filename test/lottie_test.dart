@@ -19,11 +19,11 @@ double _maxFlash(CelebrationConfig c) =>
 double _vignette(CelebrationConfig c) =>
     c.effectsOf<EdgeGlowEffect>().fold(0.0, (m, e) => math.max(m, e.strength));
 
-/// A 2 s, 100 × 100 Lottie file with nothing in it.
-Future<LottieComposition> _blank() => LottieComposition.fromBytes(
-      Uint8List.fromList(utf8.encode(
-          '{"v":"5.7.4","fr":30,"ip":0,"op":60,"w":100,"h":100,"layers":[]}')),
-    );
+/// A [frames] / 30 s, 100 × 100 Lottie file with nothing in it.
+Future<LottieComposition> _blank([int frames = 60]) =>
+    LottieComposition.fromBytes(Uint8List.fromList(
+        utf8.encode('{"v":"5.7.4","fr":30,"ip":0,"op":$frames,"w":100,"h":100,'
+            '"layers":[]}')));
 
 void main() {
   final timings = jsonDecode(File('tool/sound_timings.json').readAsStringSync())
@@ -197,6 +197,23 @@ void main() {
       await pumpAt(tester, tier, 0.9);
       expect(opacity(tester), 0, reason: 'a one-shot file has ended');
       expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('a layer switches file when the celebration changes',
+        (tester) async {
+      final first = await tester.runAsync(_blank);
+      final second = await tester.runAsync(() => _blank(90));
+      CelebrationLottieCache.put('a.json', first!);
+      CelebrationLottieCache.put('b.json', second!);
+      CelebrationTier tier(String path) =>
+          CelebrationTier.custom(CelebrationConfig(
+              duration: const Duration(seconds: 2),
+              effects: <CelebrationEffect>[LottieEffect.asset(path)]));
+
+      await pumpAt(tester, tier('a.json'), 0.5);
+      expect(tester.widget<Lottie>(find.byType(Lottie)).composition, first);
+      await pumpAt(tester, tier('b.json'), 0.5);
+      expect(tester.widget<Lottie>(find.byType(Lottie)).composition, second);
     });
 
     testWidgets('a file that is still loading draws nothing', (tester) async {

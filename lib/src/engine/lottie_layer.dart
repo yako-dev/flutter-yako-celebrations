@@ -125,25 +125,30 @@ class _LottieLayerState extends State<LottieLayer> {
   void initState() {
     super.initState();
     _bind();
-    _composition = CelebrationLottieCache.get(_effect.assetKey);
-    if (_composition == null) {
-      unawaited(
-          CelebrationLottieCache.load(_effect.assetKey).then((composition) {
-        if (mounted && composition != null) {
-          setState(() => _composition = composition);
-        }
-      }));
-    }
+    _load();
   }
 
   @override
   void didUpdateWidget(LottieLayer oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (oldWidget.effect.assetKey != _effect.assetKey) _load();
     if (oldWidget.progress != widget.progress ||
         oldWidget.effect != widget.effect ||
         oldWidget.totalSeconds != widget.totalSeconds) {
       _bind();
     }
+  }
+
+  /// Takes the file from the cache, or loads it and draws once it is ready.
+  void _load() {
+    final key = _effect.assetKey;
+    _composition = CelebrationLottieCache.get(key);
+    if (_composition != null) return;
+    unawaited(CelebrationLottieCache.load(key).then((composition) {
+      if (mounted && composition != null && _effect.assetKey == key) {
+        setState(() => _composition = composition);
+      }
+    }));
   }
 
   void _bind() {
