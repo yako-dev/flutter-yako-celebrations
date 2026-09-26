@@ -16,7 +16,9 @@ topics:
 
 screenshots:
   - description: "Legendary tier: rainbow flames, fire wall, fireworks and brand pop"
-    path: screenshots/legendary.gif
+    path: screenshots/legendary.webp
+  - description: "The five ready-made tiers, from subtle to legendary"
+    path: screenshots/tiers.webp
 
 environment:
   sdk: ^3.6.0
