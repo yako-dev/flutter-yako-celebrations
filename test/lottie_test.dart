@@ -123,6 +123,16 @@ void main() {
     }
   });
 
+  test('every bundled Lottie file parses', () async {
+    for (final animation in CelebrationLottie.values) {
+      final bytes =
+          File('assets/lottie/${animation.file}.lottie').readAsBytesSync();
+      final composition = await LottieComposition.fromBytes(bytes);
+      expect(composition.seconds, greaterThan(0.3), reason: animation.name);
+      expect(composition.bounds.width, greaterThan(0), reason: animation.name);
+    }
+  });
+
   test('your own Lottie file gets the right asset key', () {
     expect(const LottieEffect.asset('assets/a.json').assetKey, 'assets/a.json');
     expect(const LottieEffect.asset('assets/a.json', package: 'p').assetKey,
