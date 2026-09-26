@@ -44,3 +44,7 @@ coverage
 # Sound tool scratch
 tool/.venv/
 tool/build/
+
+# Agent notes: local only, never committed
+AGENTS.md
+CLAUDE.md
