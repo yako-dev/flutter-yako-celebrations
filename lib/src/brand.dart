@@ -24,6 +24,9 @@ class CelebrationBrand {
   final String? name;
 
   /// Your icon as a widget. It is drawn many times, at many sizes.
+  ///
+  /// A widget with its own size (an `Icon`, a sized SVG) is scaled to fit;
+  /// a widget that fills its space gets a square to fill.
   final Widget? icon;
 
   /// Your icon as an image.

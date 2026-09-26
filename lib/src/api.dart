@@ -90,15 +90,15 @@ abstract final class YakoCelebration {
     Iterable<CelebrationTier> tiers = CelebrationTier.values,
   ]) async {
     final backend = CelebrationGlobals.backend;
-    final futures = <Future<void>>[];
+    // One at a time: native players are happier loading in turn.
     for (final tier in tiers) {
       final sound = CelebrationGlobals.sounds[tier] ?? tier.config.sound;
-      if (sound != null && !sound.isSilent) futures.add(backend.prepare(sound));
-    }
-    try {
-      await Future.wait(futures);
-    } catch (_) {
-      // A sound that fails to load is skipped when played; nothing to do.
+      if (sound == null || sound.isSilent) continue;
+      try {
+        await backend.prepare(sound);
+      } catch (_) {
+        // A sound that fails to load is tried again when it is played.
+      }
     }
   }
 

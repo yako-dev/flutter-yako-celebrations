@@ -210,8 +210,8 @@ class FireWallRenderer extends EffectRenderer {
 
   static const int _maxTongues = 32;
   static const int _buckets = 4;
-  static const List<double> _layerHeight = <double>[1.0, 0.8, 0.56, 0.3];
-  static const List<double> _layerWidth = <double>[1.0, 0.82, 0.62, 0.4];
+  static const List<double> _layerHeight = <double>[1.0, 0.8, 0.58, 0.36];
+  static const List<double> _layerWidth = <double>[1.0, 0.82, 0.6, 0.34];
 
   final double height;
   final int fixedTongues;
@@ -262,8 +262,8 @@ class FireWallRenderer extends EffectRenderer {
             root = _ramp.light(slot, 1);
             tip = _ramp.light(slot, 1);
           default:
-            root = AlphaRamp.hot.at(0.85);
-            tip = AlphaRamp.hot.at(0.6);
+            root = AlphaRamp.hot.at(0.7);
+            tip = AlphaRamp.hot.at(0.45);
         }
         return ui.Gradient.linear(
           const Offset(0, 0.3),
@@ -334,7 +334,8 @@ class FireWallRenderer extends EffectRenderer {
         _tonguePaint.shader = _tongueShader(layer, slot);
         canvas
           ..save()
-          ..translate(x, size.height - bedHeight * (0.6 + layer * 0.15))
+          // Anchored so each tongue's round bottom sits below the screen edge.
+          ..translate(x, size.height + h * 0.22)
           ..skew(0.22 * math.sin(now * _f1[i] * 0.6 + _p2[i] + shift), 0)
           ..scale(i.isEven ? w : -w, h)
           ..drawPath(Shapes.tongue, _tonguePaint)

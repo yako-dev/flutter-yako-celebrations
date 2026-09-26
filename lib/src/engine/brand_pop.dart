@@ -136,7 +136,16 @@ class BrandPopLayer extends StatelessWidget {
 /// The brand's icon or image, or a neutral star when there is none.
 Widget brandMark(CelebrationBrand? brand, Color color) {
   final icon = brand?.icon;
-  if (icon != null) return FittedBox(child: icon);
+  if (icon != null) {
+    // Icons with their own size (an Icon, a sized SVG) are scaled up to fit;
+    // icons that fill their space get a square to fill.
+    return FittedBox(
+      child: ConstrainedBox(
+        constraints: BoxConstraints.loose(const Size.square(512)),
+        child: icon,
+      ),
+    );
+  }
   final image = brand?.image;
   if (image != null) {
     return Image(
