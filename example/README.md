@@ -8,8 +8,9 @@ flutter run
 ```
 
 - **Gallery**: tap a tier to celebrate. Switch between the Classic tiers
-  (drawn in code) and the Lottie tiers. The buttons in the top bar play
-  everything in slow motion and turn the sound on or off.
+  (drawn in code) and the Lottie tiers. In the top bar, **0.25×** plays
+  everything at a quarter of its speed, and the speaker turns sound on or
+  off.
 - **Playground**: pick effects, length, colours, brand and sound, scrub
   through the result, then celebrate.
 

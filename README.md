@@ -310,7 +310,7 @@ CelebrationPreview(
 
 The [example app](example/) has a gallery of every tier in both styles, a
 playground to build your own (effects, length, colours, brand, sound,
-scrubbing), and slow-motion and mute switches.
+scrubbing), a 0.25× speed button and a mute button.
 
 ## Check out other Yako packages:
 
