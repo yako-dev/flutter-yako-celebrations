@@ -405,12 +405,33 @@ def render_example_custom(rng: np.random.Generator) -> np.ndarray:
     return reverb(out, rng, seconds=0.8, decay=0.2, wet=0.15)
 
 
+def with_bursts(base):
+    """The Lottie ladder: a code-drawn tier's sound plus firework bursts (no
+    whistle: the Lottie fireworks rise silently) at spec["bursts"]."""
+
+    def render(spec: dict, rng: np.random.Generator) -> np.ndarray:
+        out = base(spec, rng)
+        for at in spec.get("bursts", []):
+            burst = np.zeros(samples(1.4))
+            mix(burst, pop(rng), 0.0, 0.9)
+            mix(burst, crackle(1.1, rng), 0.12, 0.8)
+            mix(out, burst, at, 0.45)
+        return out
+
+    return render
+
+
 RENDERERS = {
     "subtle": render_subtle,
     "nice": render_nice,
     "great": render_great,
     "epic": render_epic,
     "legendary": render_legendary,
+    "lottie_subtle": with_bursts(render_nice),
+    "lottie_nice": with_bursts(render_nice),
+    "lottie_great": with_bursts(render_great),
+    "lottie_epic": with_bursts(render_epic),
+    "lottie_legendary": with_bursts(render_legendary),
 }
 
 

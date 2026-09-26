@@ -5,5 +5,14 @@
   "epic": {"duration": 5.0, "impact": 0.35, "peak_db": -1.5,
            "fireworks": [1.35, 2.0, 2.65, 3.3]},
   "legendary": {"duration": 7.5, "impact": 0.5, "peak_db": -1.0,
-                "fireworks": [1.5, 2.1, 2.7, 3.3, 3.9, 4.5, 5.1, 5.7]}
+                "fireworks": [1.5, 2.1, 2.7, 3.3, 3.9, 4.5, 5.1, 5.7]},
+  "lottie_subtle": {"duration": 2.4, "impact": 0.35, "peak_db": -6.0},
+  "lottie_nice": {"duration": 3.0, "impact": 0.35, "peak_db": -4.5,
+                  "bursts": [0.8, 1.3]},
+  "lottie_great": {"duration": 3.6, "impact": 0.35, "peak_db": -3.0,
+                   "bursts": [0.9, 1.5]},
+  "lottie_epic": {"duration": 5.2, "impact": 0.35, "peak_db": -1.5,
+                  "bursts": [1.0, 1.7, 2.4, 3.1, 3.8]},
+  "lottie_legendary": {"duration": 8.0, "impact": 0.35, "peak_db": -1.0,
+                       "bursts": [1.1, 1.8, 2.5, 3.2, 3.9, 4.6, 5.3, 6.0]}
 }
