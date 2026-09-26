@@ -93,6 +93,8 @@ class _LiveCelebrationState extends State<LiveCelebration>
 
   @override
   void dispose() {
+    // The clock goes with this widget; nothing may stop it afterwards.
+    _run.halt = null;
     _controller?.dispose();
     // Taken off the screen by someone else (e.g. the host went away).
     _run.cancel();

@@ -66,6 +66,25 @@ void main() {
     expect(completed, isFalse);
   });
 
+  testWidgets('the app going away mid-celebration cleans up quietly',
+      (tester) async {
+    final context = await pumpHost(tester);
+    var completed = 0;
+    YakoCelebration.show(context,
+        tier: CelebrationTier.epic, onComplete: () => completed++);
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(YakoCelebration.isCelebrating, isTrue);
+
+    // A whole new app, so the overlay holding the celebration is gone.
+    await tester.pumpWidget(const SizedBox());
+    expect(tester.takeException(), isNull);
+    expect(YakoCelebration.isCelebrating, isFalse);
+    YakoCelebration.cancelAll();
+    await tester.pump(const Duration(seconds: 6));
+    expect(tester.takeException(), isNull);
+    expect(completed, 0);
+  });
+
   testWidgets('a new celebration replaces the one on screen', (tester) async {
     final context = await pumpHost(tester);
     final first = YakoCelebration.show(context, tier: CelebrationTier.epic);
