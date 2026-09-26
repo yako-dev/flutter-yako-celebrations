@@ -19,6 +19,8 @@ screenshots:
     path: screenshots/legendary.webp
   - description: "The five ready-made tiers, from subtle to legendary"
     path: screenshots/tiers.webp
+  - description: "lottieLegendary: a wall of flames, fireworks and coins"
+    path: screenshots/lottie_legendary.webp
   - description: "The five Lottie tiers, from lottieSubtle to lottieLegendary"
     path: screenshots/lottie_tiers.webp
 

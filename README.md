@@ -70,6 +70,10 @@ streamers, fireworks, a coin rain, fire) with a gold title that slams in and
 catches a light sweep:
 
 <p align="center">
+  <img src="https://raw.githubusercontent.com/yako-dev/flutter-yako-celebrations/main/screenshots/lottie_legendary.webp" width="300" alt="The lottieLegendary tier: a wall of flames, fireworks and coins under a gold title">
+</p>
+
+<p align="center">
   <img src="https://raw.githubusercontent.com/yako-dev/flutter-yako-celebrations/main/screenshots/lottie_tiers.webp" alt="The five Lottie tiers, from lottieSubtle to lottieLegendary">
 </p>
 
@@ -112,6 +116,10 @@ void main() {
   runApp(const MyApp());
 }
 ```
+
+The package ships no icon of its own: use a PNG from your assets as above,
+or any widget. For an SVG, add [`flutter_svg`](https://pub.dev/packages/flutter_svg)
+to your app and pass `icon: SvgPicture.asset('assets/logo.svg')`.
 
 Pass `brand:` to `show` to use another one for a single call. Without a brand,
 a neutral star pops up instead. A square icon with a transparent background
@@ -300,9 +308,9 @@ CelebrationPreview(
 
 ## Example
 
-The [example app](example/) has a gallery of every tier, a playground to build
-your own (effects, length, colours, brand, sound, scrubbing) and a slow-motion
-switch.
+The [example app](example/) has a gallery of every tier in both styles, a
+playground to build your own (effects, length, colours, brand, sound,
+scrubbing), and slow-motion and mute switches.
 
 ## Check out other Yako packages:
 
