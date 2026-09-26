@@ -1,0 +1,37 @@
+name: yako_celebrations
+description: >-
+  Full-screen celebration overlays in one line: flames, coins, confetti,
+  fireworks, your own brand icon popping, title slam, flash, shake, sound and
+  haptics. Ready-made tiers or fully custom.
+version: 0.1.0
+repository: https://github.com/yako-dev/flutter-yako-celebrations
+issue_tracker: https://github.com/yako-dev/flutter-yako-celebrations/issues
+
+topics:
+  - animation
+  - confetti
+  - celebration
+  - overlay
+  - ui
+
+screenshots:
+  - description: "Legendary tier: rainbow flames, fire wall, fireworks and brand pop"
+    path: screenshots/legendary.gif
+
+environment:
+  sdk: ^3.6.0
+  flutter: ">=3.27.0"
+
+dependencies:
+  audioplayers: ^6.1.0
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  assets:
+    - assets/sounds/

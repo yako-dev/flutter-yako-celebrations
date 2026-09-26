@@ -1,0 +1,9 @@
+{
+  "subtle": {"duration": 1.2, "impact": 0.05, "peak_db": -7.0},
+  "nice": {"duration": 2.2, "impact": 0.12, "peak_db": -5.0},
+  "great": {"duration": 3.4, "impact": 0.25, "peak_db": -3.0},
+  "epic": {"duration": 5.0, "impact": 0.35, "peak_db": -1.5,
+           "fireworks": [1.35, 2.0, 2.65, 3.3]},
+  "legendary": {"duration": 7.5, "impact": 0.5, "peak_db": -1.0,
+                "fireworks": [1.5, 2.1, 2.7, 3.3, 3.9, 4.5, 5.1, 5.7]}
+}
