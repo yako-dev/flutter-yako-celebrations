@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:yako_celebrations/yako_celebrations.dart';
 
 import 'main.dart';
+import 'theme.dart';
 
 enum _Effect {
   title('Title slam'),
@@ -184,39 +185,57 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
 
   @override
   Widget build(BuildContext context) {
-    final text = Theme.of(context).textTheme;
     return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
       children: <Widget>[
-        _Preview(
-          config: _config,
-          progress: _scrub,
-          brand: _brand ? exampleBrand : const CelebrationBrand(),
-        ),
-        Row(
-          children: <Widget>[
-            const Text('Scrub'),
-            Expanded(
-              child: Slider(
-                value: _scrub,
-                // Scrubbing keeps the same config, so the layout stays put.
-                onChanged: (v) {
-                  final keep = _cached;
-                  setState(() => _scrub = v);
-                  _cached = keep;
-                },
+        AppCard(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            children: <Widget>[
+              _Preview(
+                config: _config,
+                progress: _scrub,
+                brand: _brand ? exampleBrand : const CelebrationBrand(),
               ),
-            ),
-          ],
+              const SizedBox(height: 12),
+              Row(
+                children: <Widget>[
+                  const SizedBox(width: 4),
+                  const Icon(Icons.timelapse_rounded,
+                      size: 18, color: AppColors.faint),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Slider(
+                      value: _scrub,
+                      // Scrubbing keeps the same config, so the layout
+                      // stays put.
+                      onChanged: (v) {
+                        final keep = _cached;
+                        setState(() => _scrub = v);
+                        _cached = keep;
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: 52,
+                    child: Text(
+                      '${(_scrub * _seconds).toStringAsFixed(1)} s',
+                      textAlign: TextAlign.end,
+                      style: const TextStyle(color: AppColors.muted),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              FilledButton.icon(
+                onPressed: _celebrate,
+                icon: const Icon(Icons.play_arrow_rounded),
+                label: const Text('Celebrate'),
+              ),
+            ],
+          ),
         ),
-        FilledButton.icon(
-          onPressed: _celebrate,
-          icon: const Icon(Icons.celebration),
-          label: const Text('Celebrate'),
-        ),
-        const SizedBox(height: 20),
-        Text('Effects', style: text.titleMedium),
-        const SizedBox(height: 8),
+        const SectionLabel('Effects'),
         Wrap(
           spacing: 8,
           runSpacing: 8,
@@ -230,100 +249,138 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
               ),
           ],
         ),
-        const SizedBox(height: 12),
-        _SliderRow(
-          label: 'Length',
-          value: _seconds,
-          min: 1,
-          max: 10,
-          display: '${_seconds.toStringAsFixed(1)} s',
-          onChanged: (v) => setState(() => _seconds = v),
-        ),
-        _SliderRow(
-          label: 'Amount',
-          value: _amount,
-          min: 0.25,
-          max: 2.5,
-          display: '×${_amount.toStringAsFixed(2)}',
-          onChanged: (v) => setState(() => _amount = v),
-        ),
-        _SliderRow(
-          label: 'Dim',
-          value: _dim,
-          min: 0,
-          max: 0.8,
-          display: '${(_dim * 100).round()} %',
-          onChanged: (v) => setState(() => _dim = v),
-        ),
-        const SizedBox(height: 12),
-        Text('Colours', style: text.titleMedium),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: <Widget>[
-            for (final p in _Palette.values)
-              ChoiceChip(
-                label: Text(p.label),
-                selected: _palette == p,
-                onSelected: (_) => setState(() => _palette = p),
+        const SectionLabel('Timing'),
+        AppCard(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+          child: Column(
+            children: <Widget>[
+              _SliderRow(
+                label: 'Length',
+                value: _seconds,
+                min: 1,
+                max: 10,
+                display: '${_seconds.toStringAsFixed(1)} s',
+                onChanged: (v) => setState(() => _seconds = v),
               ),
-          ],
+              _SliderRow(
+                label: 'Amount',
+                value: _amount,
+                min: 0.25,
+                max: 2.5,
+                display: '×${_amount.toStringAsFixed(2)}',
+                onChanged: (v) => setState(() => _amount = v),
+              ),
+              _SliderRow(
+                label: 'Dim',
+                value: _dim,
+                min: 0,
+                max: 0.8,
+                display: '${(_dim * 100).round()} %',
+                onChanged: (v) => setState(() => _dim = v),
+              ),
+            ],
+          ),
         ),
-        const SizedBox(height: 12),
-        Row(
-          children: <Widget>[
-            const Text('Accent'),
-            const SizedBox(width: 12),
-            for (final color in _accents)
-              GestureDetector(
-                onTap: () => setState(() => _accent = color),
-                child: Container(
-                  width: 32,
-                  height: 32,
-                  margin: const EdgeInsets.only(right: 8),
-                  decoration: BoxDecoration(
-                    color: color,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.white,
-                      width: _accent == color ? 3 : 0,
+        const SectionLabel('Colours'),
+        AppCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: <Widget>[
+                  for (final p in _Palette.values)
+                    ChoiceChip(
+                      label: Text(p.label),
+                      selected: _palette == p,
+                      onSelected: (_) => setState(() => _palette = p),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: <Widget>[
+                  for (final color in _accents)
+                    GestureDetector(
+                      onTap: () => setState(() => _accent = color),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 150),
+                        width: 34,
+                        height: 34,
+                        margin: const EdgeInsets.only(right: 10),
+                        decoration: BoxDecoration(
+                          color: color,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: _accent == color
+                                ? Colors.white
+                                : Colors.transparent,
+                            width: 3,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SectionLabel('Text'),
+        AppCard(
+          child: Column(
+            children: <Widget>[
+              TextField(
+                controller: _title,
+                decoration: const InputDecoration(labelText: 'Title'),
+                onChanged: (_) => setState(() {}),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: _subtitle,
+                decoration: const InputDecoration(labelText: 'Subtitle'),
+                onChanged: (_) => setState(() {}),
+              ),
+            ],
+          ),
+        ),
+        const SectionLabel('Brand and sound'),
+        AppCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Image.asset('assets/yako_logo.png', width: 28, height: 28),
+                  const SizedBox(width: 12),
+                  const Expanded(
+                    child: Text(
+                      'Your icon and name',
+                      style: TextStyle(fontWeight: FontWeight.w600),
                     ),
                   ),
-                ),
+                  Switch(
+                    value: _brand,
+                    onChanged: (v) => setState(() => _brand = v),
+                  ),
+                ],
               ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        Text('Text', style: text.titleMedium),
-        TextField(
-          controller: _title,
-          decoration: const InputDecoration(labelText: 'Title'),
-          onChanged: (_) => setState(() {}),
-        ),
-        TextField(
-          controller: _subtitle,
-          decoration: const InputDecoration(labelText: 'Subtitle'),
-          onChanged: (_) => setState(() {}),
-        ),
-        const SizedBox(height: 16),
-        SwitchListTile(
-          contentPadding: EdgeInsets.zero,
-          title: const Text('Brand (icon + badge)'),
-          value: _brand,
-          onChanged: (v) => setState(() => _brand = v),
-        ),
-        Text('Sound', style: text.titleMedium),
-        const SizedBox(height: 8),
-        SegmentedButton<_Sound>(
-          segments: const <ButtonSegment<_Sound>>[
-            ButtonSegment<_Sound>(
-                value: _Sound.builtIn, label: Text('Built-in')),
-            ButtonSegment<_Sound>(value: _Sound.none, label: Text('None')),
-            ButtonSegment<_Sound>(value: _Sound.custom, label: Text('Custom')),
-          ],
-          selected: <_Sound>{_sound},
-          onSelectionChanged: (s) => setState(() => _sound = s.single),
+              const SizedBox(height: 14),
+              SegmentedButton<_Sound>(
+                showSelectedIcon: false,
+                segments: const <ButtonSegment<_Sound>>[
+                  ButtonSegment<_Sound>(
+                      value: _Sound.builtIn, label: Text('Built-in')),
+                  ButtonSegment<_Sound>(
+                      value: _Sound.none, label: Text('No sound')),
+                  ButtonSegment<_Sound>(
+                      value: _Sound.custom, label: Text('Your own')),
+                ],
+                selected: <_Sound>{_sound},
+                onSelectionChanged: (s) => setState(() => _sound = s.single),
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -349,14 +406,28 @@ class _SliderRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    final row = Row(
       children: <Widget>[
-        SizedBox(width: 64, child: Text(label)),
+        SizedBox(
+          width: 64,
+          child: Text(label, style: const TextStyle(color: AppColors.muted)),
+        ),
         Expanded(
           child: Slider(value: value, min: min, max: max, onChanged: onChanged),
         ),
-        SizedBox(width: 56, child: Text(display, textAlign: TextAlign.end)),
+        SizedBox(
+          width: 56,
+          child: Text(
+            display,
+            textAlign: TextAlign.end,
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
       ],
+    );
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: row,
     );
   }
 }
@@ -377,11 +448,11 @@ class _Preview extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        height: 300,
+        height: 340,
         child: AspectRatio(
           aspectRatio: 9 / 16,
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(18),
             child: LayoutBuilder(
               builder: (context, box) => MediaQuery(
                 data: MediaQuery.of(context).copyWith(
@@ -393,7 +464,7 @@ class _Preview extends StatelessWidget {
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: <Color>[Color(0xFF2A2350), Color(0xFF151129)],
+                      colors: <Color>[Color(0xFF141824), AppColors.background],
                     ),
                   ),
                   child: CelebrationPreview(

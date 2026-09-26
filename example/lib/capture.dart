@@ -1,11 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:yako_celebrations/yako_celebrations.dart';
 
 import 'gallery_page.dart';
+import 'theme.dart';
 
-// Screenshot helpers for the README, off unless a dart-define turns them on:
+// Screenshot helpers for the README, off unless a dart-define turns them on.
+// Both hide the app and the status bar: celebrations play on an empty dark
+// stage, so every effect is easy to see.
 //
 //   flutter run --dart-define=SHOTS=legendary@0.35,epic@0.4
 //     shows each tier frozen at that moment for 3 s, printing "SHOT <n>"
@@ -16,8 +20,8 @@ const String _demo = String.fromEnvironment('DEMO');
 const int _delayMs =
     int.fromEnvironment('CAPTURE_DELAY_MS', defaultValue: 2500);
 
-/// Wraps the app and, when asked by a dart-define, shows celebrations on
-/// its own for screenshots and recordings.
+/// Wraps the app and, when asked by a dart-define, shows celebrations on an
+/// empty dark stage for screenshots and recordings.
 class CaptureMode extends StatefulWidget {
   /// Wraps [child].
   const CaptureMode({super.key, required this.child});
@@ -43,9 +47,14 @@ class _CaptureModeState extends State<CaptureMode> {
         ...lottieTierInfos
       ].firstWhere((i) => i.tier == tier).subtitle;
 
+  static bool get _capturing => _shots.isNotEmpty || _demo.isNotEmpty;
+
   @override
   void initState() {
     super.initState();
+    if (_capturing) {
+      unawaited(SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive));
+    }
     if (_shots.isNotEmpty) {
       _timer = Timer(const Duration(milliseconds: _delayMs), () => _shot(0));
     } else if (_demo.isNotEmpty) {
@@ -100,12 +109,16 @@ class _CaptureModeState extends State<CaptureMode> {
 
   @override
   Widget build(BuildContext context) {
+    final stage = _capturing
+        ? const ColoredBox(
+            color: AppColors.background, child: SizedBox.expand())
+        : widget.child;
     final frozen = _frozen;
-    if (frozen == null) return widget.child;
+    if (frozen == null) return stage;
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
-        widget.child,
+        stage,
         CelebrationPreview(
           tier: frozen.$1,
           progress: AlwaysStoppedAnimation<double>(frozen.$2),
