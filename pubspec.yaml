@@ -3,7 +3,7 @@ description: >-
   Full-screen celebration overlays in one line: flames, coins, confetti,
   fireworks, your own brand icon popping, title slam, flash, shake, sound and
   haptics. Ready-made tiers or fully custom.
-version: 1.0.0
+version: 1.0.1
 repository: https://github.com/yako-dev/flutter-yako-celebrations
 issue_tracker: https://github.com/yako-dev/flutter-yako-celebrations/issues
 

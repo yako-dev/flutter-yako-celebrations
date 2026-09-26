@@ -1,3 +1,7 @@
+## [1.0.1] - [Sep 26, 2026]
+
+* README: a **More from Yako** grid with an animated preview of each of our other packages.
+
 ## [1.0.0] - [Sep 26, 2026]
 
 * First release.
