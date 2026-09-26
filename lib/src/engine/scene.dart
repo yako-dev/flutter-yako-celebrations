@@ -13,6 +13,7 @@ import '../painting/kit.dart';
 import '../painting/particle_renderers.dart';
 import '../painting/renderer.dart';
 import 'brand_pop.dart';
+import 'lottie_layer.dart';
 import 'shake.dart';
 import 'title.dart';
 
@@ -188,6 +189,15 @@ class _CelebrationSceneState extends State<CelebrationScene> {
               85, SparklesRenderer(effect, palette, accent, total, seed)));
         case FlashEffect():
           layers.add(_Layer.paint(100, FlashRenderer(effect, total)));
+        case LottieEffect():
+          layers.add(_Layer.widget(
+            65,
+            (context) => LottieLayer(
+              effect: effect,
+              progress: widget.progress,
+              totalSeconds: total,
+            ),
+          ));
         case ShakeEffect():
           break;
       }

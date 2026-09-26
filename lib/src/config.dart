@@ -185,6 +185,8 @@ class CelebrationConfig {
             alignment: effect.alignment,
             gradient: effect.gradient,
             glow: effect.glow,
+            colors: effect.colors,
+            glowColor: effect.glowColor,
             palette: effect.palette,
           ));
         case SparklesEffect():

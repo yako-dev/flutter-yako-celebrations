@@ -37,9 +37,9 @@ enum ConfettiLaunch {
 /// 5 second celebration runs from 1 s to 4 s. Presets scale nicely when you
 /// change the duration because of this.
 ///
-/// This class is sealed: the effects below are all there is. To draw
-/// something of your own on the same clock, use
-/// [CelebrationConfig.extraLayers].
+/// This class is sealed: the effects below are all there is. To play your
+/// own Lottie file, use [LottieEffect.asset]; to draw anything else on the
+/// same clock, use [CelebrationConfig.extraLayers].
 sealed class CelebrationEffect {
   const CelebrationEffect({
     required this.start,
@@ -343,6 +343,9 @@ class TitleSlamEffect extends CelebrationEffect {
     this.alignment = const Alignment(0, -0.12),
     this.gradient = true,
     this.glow = true,
+    this.colors,
+    this.glowColor,
+    this.shimmer = false,
     super.start = 0,
     super.end = 1,
     super.palette,
@@ -373,6 +376,15 @@ class TitleSlamEffect extends CelebrationEffect {
 
   /// Whether to draw a glow around the title.
   final bool glow;
+
+  /// The title's gradient, left to right. `null` builds one from the palette.
+  final List<Color>? colors;
+
+  /// The glow colour. `null` uses the palette's main colour.
+  final Color? glowColor;
+
+  /// Whether a band of light sweeps across the letters every 1.4 seconds.
+  final bool shimmer;
 
   @override
   int get particleCount => 1;
@@ -448,4 +460,162 @@ class EdgeGlowEffect extends CelebrationEffect {
 
   @override
   int get particleCount => 1;
+}
+
+/// The Lottie animations that ship with the package.
+///
+/// They are free animations from LottieFiles, used unchanged under the
+/// Lottie Simple License (see `assets/lottie/LICENSE.md` in the package).
+enum CelebrationLottie {
+  /// A round confetti burst from the middle (2 s).
+  confetti('confetti'),
+
+  /// Gold coins raining from the top (5.3 s).
+  coinRain('coin_rain'),
+
+  /// A bonfire (0.5 s loop).
+  fireBurst('fire_burst'),
+
+  /// Two firework shells bursting (1.7 s).
+  fireworks('fireworks_a'),
+
+  /// White light rays (5 s). Tint it to colour it.
+  lightRays('light_rays'),
+
+  /// A cluster of coloured firework bursts (2.4 s).
+  fireworksCluster('fireworks_b'),
+
+  /// Confetti streamers thrown upwards (5.3 s).
+  streamerBurst('burst'),
+
+  /// A wall of flames along the bottom of its box (2 s loop).
+  flameWall('flame_wall');
+
+  const CelebrationLottie(this.file);
+
+  /// The file name without its extension.
+  final String file;
+
+  /// The Flutter asset key of the file.
+  String get assetKey =>
+      'packages/yako_celebrations/assets/lottie/$file.lottie';
+}
+
+/// Where a [LottieEffect] sits on the screen. Sizes follow the screen, so
+/// the same effect works on any phone or tablet.
+enum LottieAnchor {
+  /// The whole screen, cropped to cover.
+  fullScreen,
+
+  /// Full width, the top [LottieEffect.scale] of the screen height.
+  topBand,
+
+  /// Full width, [LottieEffect.scale] × screen width tall, on the bottom edge.
+  bottomEdge,
+
+  /// A square in the top-left corner, [LottieEffect.scale] × screen width.
+  topLeft,
+
+  /// A square in the top-right corner, [LottieEffect.scale] × screen width.
+  topRight,
+
+  /// A square in the middle, [LottieEffect.scale] × screen width.
+  center,
+}
+
+/// A Lottie animation played on the celebration's clock.
+///
+/// Use one of the [CelebrationLottie] animations that ship with the package,
+/// or your own file with [LottieEffect.asset]. Like every effect it follows
+/// slow motion and cancelling, and draws above the particles and below the
+/// title.
+///
+/// ```dart
+/// LottieEffect(CelebrationLottie.coinRain,
+///     anchor: LottieAnchor.topBand, scale: 0.4, start: 0.1, end: 0.9)
+/// ```
+class LottieEffect extends CelebrationEffect {
+  /// Plays one of the bundled [animation]s.
+  const LottieEffect(
+    CelebrationLottie this.animation, {
+    this.anchor = LottieAnchor.fullScreen,
+    this.scale = 1,
+    this.loop = true,
+    this.opacity = 1,
+    this.speed = 1,
+    this.tint,
+    this.spinTurns = 0,
+    this.fit,
+    this.fadeBottom = false,
+    super.start = 0,
+    super.end = 1,
+  })  : path = null,
+        package = null;
+
+  /// Plays your own Lottie file (`.json` or `.lottie`) from your assets.
+  const LottieEffect.asset(
+    String this.path, {
+    this.package,
+    this.anchor = LottieAnchor.fullScreen,
+    this.scale = 1,
+    this.loop = true,
+    this.opacity = 1,
+    this.speed = 1,
+    this.tint,
+    this.spinTurns = 0,
+    this.fit,
+    this.fadeBottom = false,
+    super.start = 0,
+    super.end = 1,
+  }) : animation = null;
+
+  /// The bundled animation, or `null` for [LottieEffect.asset].
+  final CelebrationLottie? animation;
+
+  /// Your asset's path, or `null` for a bundled animation.
+  final String? path;
+
+  /// The package that owns [path], or `null` for your app.
+  final String? package;
+
+  /// Where on the screen it plays.
+  final LottieAnchor anchor;
+
+  /// Size of its box; see [LottieAnchor] for what it is a fraction of.
+  final double scale;
+
+  /// Loop the file for the whole window. Otherwise it plays once and
+  /// disappears when the file ends.
+  final bool loop;
+
+  /// Peak opacity, from 0 to 1.
+  final double opacity;
+
+  /// Playback speed; 1 is the designer's own timing.
+  final double speed;
+
+  /// Multiplies its colours, e.g. white rays become gold rays.
+  final Color? tint;
+
+  /// Whole turns of slow rotation across the window. 0 keeps it still.
+  final double spinTurns;
+
+  /// How the file fills its box. `null`: cover for [LottieAnchor.fullScreen]
+  /// and [LottieAnchor.topBand], contain for the rest.
+  final BoxFit? fit;
+
+  /// Fade out over the bottom third of the box, so falling things dissolve
+  /// instead of vanishing on the file's straight bottom edge.
+  final bool fadeBottom;
+
+  /// The Flutter asset key of the file.
+  String get assetKey {
+    final bundled = animation;
+    if (bundled != null) return bundled.assetKey;
+    final own = package;
+    return own == null ? path! : 'packages/$own/$path';
+  }
+
+  @override
+  int get particleCount => 20;
 }

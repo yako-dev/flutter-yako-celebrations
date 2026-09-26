@@ -44,9 +44,14 @@ class TitleLayer extends StatelessWidget {
     final size = MediaQuery.maybeSizeOf(context) ?? const Size(400, 800);
     final fontSize =
         (size.shortestSide * 0.15).clamp(34.0, 120.0) * effect.fontSize;
-    final glowColor = palette.representative(accent);
+    final glowColor = effect.glowColor ?? palette.representative(accent);
     final outline = Color.lerp(glowColor, const Color(0xFF000000), 0.6)!;
-    final gradient = _gradientColors(palette.resolve(accent), accent);
+    final gradient =
+        effect.colors ?? _gradientColors(palette.resolve(accent), accent);
+    final startSeconds = effect.start * totalSeconds;
+    final shimmer = effect.shimmer
+        ? MappedShimmer(progress, totalSeconds, startSeconds)
+        : null;
     final base = celebrationTextStyle(context)
         .copyWith(
           color: const Color(0xFFFFFFFF),
@@ -84,6 +89,7 @@ class TitleLayer extends StatelessWidget {
                           gradient: effect.gradient ? gradient : null,
                           outline: outline,
                           glowColor: effect.glow ? glowColor : null,
+                          shimmer: shimmer,
                         ),
                 ),
                 RepaintBoundary(
@@ -143,6 +149,7 @@ class _TitleText extends StatelessWidget {
     required this.gradient,
     required this.outline,
     required this.glowColor,
+    this.shimmer,
   });
 
   final String text;
@@ -150,6 +157,9 @@ class _TitleText extends StatelessWidget {
   final List<Color>? gradient;
   final Color outline;
   final Color? glowColor;
+
+  /// Where the light band is, from about -1 to 2 across the letters.
+  final Animation<double>? shimmer;
 
   @override
   Widget build(BuildContext context) {
@@ -265,6 +275,25 @@ class _SubtitlePill extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// The shimmer band's position: a sweep across the letters every 1.4 s after
+/// the title lands, from -1 (off the left) to 2 (off the right).
+class MappedShimmer extends Animation<double>
+    with AnimationWithParentMixin<double> {
+  MappedShimmer(this.parent, this.totalSeconds, this.startSeconds);
+
+  @override
+  final Animation<double> parent;
+  final double totalSeconds;
+  final double startSeconds;
+
+  @override
+  double get value {
+    final t = parent.value * totalSeconds - startSeconds;
+    if (t < 0) return -1;
+    return (t / 1.4) % 1.0 * 3 - 1;
   }
 }
 

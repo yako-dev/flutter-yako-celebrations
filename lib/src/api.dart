@@ -5,7 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import 'brand.dart';
+import 'effects.dart';
 import 'engine/live.dart';
+import 'engine/lottie_layer.dart';
 import 'engine/run.dart';
 import 'sound.dart';
 import 'tier.dart';
@@ -33,8 +35,8 @@ abstract final class YakoCelebration {
   /// * [manageAudioSession]: let the package set an audio session that mixes
   ///   with the user's music and respects the silent switch on iOS. Turn off
   ///   if your app configures `audioplayers`' audio context itself.
-  /// * [preloadSounds]: load every built-in sound now, so the first
-  ///   celebration does not pay for it.
+  /// * [preloadSounds]: load the built-in sounds now, so the first
+  ///   celebration does not pay for it (see [preload]).
   static void configure({
     CelebrationBrand? brand,
     bool muted = false,
@@ -82,24 +84,39 @@ abstract final class YakoCelebration {
   /// Turns haptic taps on or off app-wide.
   static set hapticsEnabled(bool value) => CelebrationGlobals.haptics = value;
 
-  /// Loads the sounds of [tiers] (all ready-made tiers by default, plus any
-  /// app-wide [configure] sounds for them) so they start instantly.
+  /// Loads the sounds and Lottie files of [tiers] (the code-drawn tiers by
+  /// default, plus any app-wide [configure] sounds for them) so they start
+  /// instantly.
+  ///
+  /// Using the Lottie ladder? Call
+  /// `YakoCelebration.preload(CelebrationTier.lottieValues)` once at start-up.
   ///
   /// Safe to call more than once; loading happens only the first time.
   static Future<void> preload([
     Iterable<CelebrationTier> tiers = CelebrationTier.values,
   ]) async {
-    final backend = CelebrationGlobals.backend;
-    // One at a time: native players are happier loading in turn.
-    for (final tier in tiers) {
-      final sound = CelebrationGlobals.sounds[tier] ?? tier.config.sound;
-      if (sound == null || sound.isSilent) continue;
-      try {
-        await backend.prepare(sound);
-      } catch (_) {
-        // A sound that fails to load is tried again when it is played.
+    final files = <String>{
+      for (final tier in tiers)
+        for (final effect in tier.config.effectsOf<LottieEffect>())
+          effect.assetKey,
+    };
+    final lottie = Future.wait(files.map(CelebrationLottieCache.load));
+    final muted = CelebrationGlobals.muted;
+    final ownAudio = CelebrationGlobals.onPlaySound != null;
+    if (!muted && !ownAudio) {
+      final backend = CelebrationGlobals.backend;
+      // One at a time: native players are happier loading in turn.
+      for (final tier in tiers) {
+        final sound = CelebrationGlobals.sounds[tier] ?? tier.config.sound;
+        if (sound == null || sound.isSilent) continue;
+        try {
+          await backend.prepare(sound);
+        } catch (_) {
+          // A sound that fails to load is tried again when it is played.
+        }
       }
     }
+    await lottie;
   }
 
   /// The screen shake of celebrations shown with [show].
