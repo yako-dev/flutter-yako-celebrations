@@ -69,6 +69,10 @@ The same five sizes, built from Lottie animations (light rays, confetti,
 streamers, fireworks, a coin rain, fire) with a gold title that slams in and
 catches a light sweep:
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/yako-dev/flutter-yako-celebrations/main/screenshots/lottie_tiers.webp" alt="The five Lottie tiers, from lottieSubtle to lottieLegendary">
+</p>
+
 | Tier | Length | What happens |
 |---|---|---|
 | `lottieSubtle` | 2.4 s | Light rays and a confetti pop, a soft indigo flash. |
