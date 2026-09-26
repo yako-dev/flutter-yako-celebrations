@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:yako_celebrations/yako_celebrations.dart';
@@ -18,6 +20,8 @@ void main() {
   // Once, app-wide: your brand, and load the built-in sounds now so the first
   // celebration starts instantly.
   YakoCelebration.configure(brand: exampleBrand);
+  // Parse the Lottie files now, so the first Lottie tier starts at once.
+  unawaited(YakoCelebration.preload(CelebrationTier.lottieValues));
   runApp(const ExampleApp());
 }
 

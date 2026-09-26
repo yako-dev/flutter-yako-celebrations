@@ -8,9 +8,10 @@ flash, shake, sound and haptics. Pick a ready-made tier or build your own.
   <img src="https://raw.githubusercontent.com/yako-dev/flutter-yako-celebrations/main/screenshots/legendary.webp" width="300" alt="The legendary tier: rainbow flames, a wall of fire, fireworks and a storm of brand icons">
 </p>
 
-Everything is drawn in code (no Lottie files), runs on one clock, and never
-blocks touches. Every built-in sound is synthesised by the package's own
-script, so you can ship it in any app.
+Two ladders to pick from: effects drawn in code, or designer-made Lottie
+animations. Both run on one clock and never block touches. Every built-in
+sound is synthesised by the package's own script, so you can ship it in any
+app.
 
 ## Installing
 
@@ -61,6 +62,34 @@ handle.cancel(); // stop early
 
 Each tier is longer and bigger than the one below it, and each has its own
 sound, as long as the celebration itself.
+
+### Lottie tiers
+
+The same five sizes, built from Lottie animations (light rays, confetti,
+streamers, fireworks, a coin rain, fire) with a gold title that slams in and
+catches a light sweep:
+
+| Tier | Length | What happens |
+|---|---|---|
+| `lottieSubtle` | 2.4 s | Light rays and a confetti pop, a soft indigo flash. |
+| `lottieNice` | 3 s | Turning violet rays, streamers, a firework cluster. |
+| `lottieGreat` | 3.6 s | Gold title, confetti and fireworks. |
+| `lottieEpic` | 5.2 s | Fire from below, a coin rain, fireworks, warm flash and shake. |
+| `lottieLegendary` | 8 s | A wall of flames, coins in both corners, fireworks everywhere. |
+
+```dart
+YakoCelebration.show(context, tier: CelebrationTier.lottieEpic);
+```
+
+Lottie files take a moment to parse, so load them once at start-up:
+
+```dart
+YakoCelebration.preload(CelebrationTier.lottieValues);
+```
+
+The Lottie files are free animations from LottieFiles under the Lottie Simple
+License, not MIT: see
+[assets/lottie/LICENSE.md](assets/lottie/LICENSE.md).
 
 ## Your brand
 
@@ -132,7 +161,7 @@ keeps everything in step. Handy helpers: `config.without<ShakeEffect>()`,
 
 | Effect | What it draws | Main options |
 |---|---|---|
-| `TitleSlamEffect` | Title slamming in with a bounce, plus the subtitle | `slamFrom`, `fontSize`, `style`, `alignment`, `gradient`, `glow` |
+| `TitleSlamEffect` | Title slamming in with a bounce, plus the subtitle | `slamFrom`, `fontSize`, `style`, `alignment`, `colors`, `glow`, `shimmer` |
 | `FlamesEffect` | Little flames bursting out and drifting | `count`, `size`, `area` (burst, fountain, shower, drift) |
 | `CoinsEffect` | Spinning gold coins raining down | `count`, `size`, `area` |
 | `ConfettiEffect` | Fluttering paper confetti | `count`, `size`, `launch` (cannons, burst, rain) |
@@ -145,6 +174,7 @@ keeps everything in step. Handy helpers: `config.without<ShakeEffect>()`,
 | `FlashEffect` | A full-screen camera flash | `strength`, `color` |
 | `ShakeEffect` | Screen shake | `strength`, `frequency` |
 | `EdgeGlowEffect` | A pulsing glow around the edges | `strength`, `pulse` |
+| `LottieEffect` | A bundled Lottie animation, or your own with `LottieEffect.asset` | `anchor`, `scale`, `loop`, `tint`, `spinTurns`, `fadeBottom` |
 
 Every effect takes a `palette`: `CelebrationPalette.gold`, `.fire`, `.party`,
 `.rainbow` (hue-shifting over time), `.accent` (shades of the config's
@@ -152,12 +182,19 @@ Every effect takes a `palette`: `CelebrationPalette.gold`, `.fire`, `.party`,
 
 ### Your own layers
 
-Want your own Lottie or widget in the show? Add it on the same clock:
+Your own Lottie file joins like any effect:
+
+```dart
+LottieEffect.asset('assets/trophy.json',
+    anchor: LottieAnchor.center, scale: 0.6, loop: false, start: 0.1)
+```
+
+Any other widget can join on the same clock:
 
 ```dart
 CelebrationConfig(
   extraLayers: [
-    (context, progress) => MyLottie(progress: progress),
+    (context, progress) => MyWidget(progress: progress),
   ],
 )
 ```

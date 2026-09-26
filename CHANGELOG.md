@@ -8,12 +8,18 @@
 * `CelebrationTier.custom(CelebrationConfig(...))`: pick your own effects,
   length, colours, title, sound, haptics and background dim. Every preset is a
   plain `CelebrationConfig` you can `copyWith`.
-* Effects, all drawn in code (no Lottie): flames, spinning coins, confetti,
+* A second ladder built from designer-made Lottie animations:
+  `lottieSubtle`, `lottieNice`, `lottieGreat`, `lottieEpic`,
+  `lottieLegendary` (`CelebrationTier.lottieValues`), with a light-sweep
+  title, vignette, flash and shake. Eight Lottie files ship with the package
+  under the Lottie Simple License (see `assets/lottie/LICENSE.md`).
+* `LottieEffect`: play a bundled animation or your own Lottie file on the
+  celebration's clock, placed with `LottieAnchor`, tinted, spun or faded.
+* Code-drawn effects: flames, spinning coins, confetti,
   streamers, fireworks, sparkles, light rays, your brand icon popping up in a
   storm, a wall of fire, title slam with subtitle, camera flash, screen shake
   and edge glow. Palettes: gold, fire, party, rainbow and your accent colour.
-* `extraLayers` to add your own widgets (for example your own Lottie) on the
-  same clock.
+* `extraLayers` to add your own widgets on the same clock.
 * `CelebrationBrand`: your name and icon (widget or image), per call or
   app-wide with `YakoCelebration.configure`.
 * Built-in sounds for every tier, synthesised by the package's own script, so

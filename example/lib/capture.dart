@@ -33,11 +33,15 @@ class _CaptureModeState extends State<CaptureMode> {
   (CelebrationTier, double)? _frozen;
   Timer? _timer;
 
-  static CelebrationTier _tier(String name) =>
-      CelebrationTier.values.firstWhere((t) => t.name == name.trim());
+  static CelebrationTier _tier(String name) => <CelebrationTier>[
+        ...CelebrationTier.values,
+        ...CelebrationTier.lottieValues,
+      ].firstWhere((t) => t.name == name.trim());
 
-  static String? _subtitleOf(CelebrationTier tier) =>
-      tierInfos.firstWhere((i) => i.tier == tier).subtitle;
+  static String? _subtitleOf(CelebrationTier tier) => <TierInfo>[
+        ...tierInfos,
+        ...lottieTierInfos
+      ].firstWhere((i) => i.tier == tier).subtitle;
 
   @override
   void initState() {

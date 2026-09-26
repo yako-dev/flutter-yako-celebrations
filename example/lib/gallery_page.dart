@@ -42,6 +42,29 @@ const List<TierInfo> tierInfos = <TierInfo>[
       Color(0xFFFFB300)),
 ];
 
+/// The Lottie ladder, smallest first.
+const List<TierInfo> lottieTierInfos = <TierInfo>[
+  TierInfo(CelebrationTier.lottieSubtle, 'Light rays and a confetti pop.', null,
+      Color(0xFF859FFF)),
+  TierInfo(
+      CelebrationTier.lottieNice,
+      'Turning violet rays, streamers, a firework cluster.',
+      null,
+      Color(0xFFB981FF)),
+  TierInfo(CelebrationTier.lottieGreat, 'Gold title, confetti and fireworks.',
+      '+50 XP', Color(0xFFFFD36B)),
+  TierInfo(
+      CelebrationTier.lottieEpic,
+      'Fire, a coin rain, fireworks, warm flash and shake.',
+      '+500 XP',
+      Color(0xFFFFA726)),
+  TierInfo(
+      CelebrationTier.lottieLegendary,
+      'Wall of flames, coins in both corners, fireworks everywhere.',
+      'NEW RECORD',
+      Color(0xFFFFC53D)),
+];
+
 /// A card per tier; tap to celebrate.
 class GalleryPage extends StatelessWidget {
   /// Creates the gallery.
@@ -66,6 +89,21 @@ class GalleryPage extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         for (final info in tierInfos) _TierCard(info: info),
+        const SizedBox(height: 16),
+        Text(
+          'Lottie tiers',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'CelebrationTier.lottieEpic',
+          style: Theme.of(context)
+              .textTheme
+              .bodySmall
+              ?.copyWith(fontFamily: 'monospace', color: Colors.white60),
+        ),
+        const SizedBox(height: 16),
+        for (final info in lottieTierInfos) _TierCard(info: info),
       ],
     );
   }
@@ -123,8 +161,11 @@ class _TierCard extends StatelessWidget {
                         Text(info.blurb),
                         const SizedBox(height: 4),
                         Text(
-                          '${seconds.toStringAsFixed(1)} s · '
-                          '${info.tier.config.particleCount} particles',
+                          info.tier.isLottie
+                              ? '${seconds.toStringAsFixed(1)} s · '
+                                  '${info.tier.config.effectsOf<LottieEffect>().length} Lottie layers'
+                              : '${seconds.toStringAsFixed(1)} s · '
+                                  '${info.tier.config.particleCount} particles',
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall
